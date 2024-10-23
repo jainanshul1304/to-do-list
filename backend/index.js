@@ -8,7 +8,13 @@ app.listen(Port, () => {
   console.log(`App is listening at ${Port}`);
 });
 const cors = require("cors");
-app.use(cors());
+app.use(cors({ 
+  origin: 'http://localhost:4200',  // Allow only Angular frontend
+  methods: ['GET', 'POST', 'OPTIONS'],  // Allow required methods
+  allowedHeaders: ['Content-Type'],  // Allow required headers
+  credentials: true  // If cookies or auth headers are needed
+}));
+
 
 app.post("/todo", (req, res) => {
   const { description, status, dateString } = req.body;
@@ -37,36 +43,26 @@ app.get("/todo", (req, res) => {
   });
 });
 
-app.post("/login", (req, res) => {
-  const { email_id, password } = req.body;
-  const query = "SELECT * FROM UserList WHERE email=? AND password=? ";
-  const Values = [req.body.email_id, req.body.password];
-  db.query(query, Values, (err, results) => {
+app.post('/login', (req, res) => {
+  console.log('Received login request with data:', req.body);  // Log incoming data
+
+  const { email, password } = req.body;  // Adjust field names if needed
+
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Missing credentials' });
+  }
+
+  const query = 'SELECT * FROM UserList WHERE email=? AND password=?';
+  db.query(query, [email, password], (err, results) => {
     if (err) {
-      console.log(err);
-      return res.status(500).send("Internal server error");
+      console.error('Database error:', err);
+      return res.status(500).json({ success: false, message: 'Server error' });
     }
 
     if (results.length > 0) {
-      console.log("Authenticated!");
-      return res.status(201).send(true);
+      return res.status(201).json({ success: true });
     } else {
-      console.log("I don't know you");
-      return res.status(401).send(false);
+      return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
   });
 });
-
-app.post("/addUser",(req,res)=>{
-  const {email_id, password} = req.body;
-  console.log("Request Body:", req.body);
-  const query = "INSERT INTO UserList (email,password) VALUES(?,?)";
-  const Values = [req.body.email_id, req.body.password];
-
-  db.query(query,Values, (err,results)=>{
-    if(err){
-      console.log(err);
-    }
-    return res.status(201).json({email_id,password});
-  })
-})
