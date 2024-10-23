@@ -1,0 +1,36 @@
+<div class="main h-[100vh] flex flex-col justify-center items-center gap-2" >
+    <label
+      for="addItemInput"
+      class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
+      >What would you like to do today</label
+    >
+  
+    <div class="addInterface flex gap-2">
+      <input
+        #newItem
+        placeholder="Add items"
+        (keyup.enter)="addItems(newItem.value,'active', newItem2.value);"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        id="addItemInput"
+      />
+      <input
+        type="date"
+        #newItem2
+        (keyup.enter)="addItems(newItem.value, 'active',newItem2.value);"
+        placeholder=""
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        id="addDateInput"
+      />
+  
+      <button class="btn-primary" (click)="addItems(newItem.value, 'active',newItem2.value);">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+    <ul class="grid grid-cols-4 mt-4 w-full place-items-center">
+      <li *ngFor="let item of allItems"  class="w-[50px] h-[50px]">
+        <h5 class="uppercase font-normal text-gray-700 dark:text-gray-400 p-3 border inline-block border-gray-500 text-center">
+          {{ item.description }}<br>{{ item.dateString}}
+        </h5>
+      </li>
+    </ul>
+  </div>
