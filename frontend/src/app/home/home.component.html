@@ -1,36 +1,38 @@
-<div class="main h-[100vh] flex flex-col justify-center items-center gap-2" >
-    <label
-      for="addItemInput"
-      class="block mb-2 text-lg font-medium text-gray-900 dark:text-white"
-      >What would you like to do today</label
-    >
-  
-    <div class="addInterface flex gap-2">
-      <input
-        #newItem
-        placeholder="Add items"
-        (keyup.enter)="addItems(newItem.value,'active', newItem2.value);"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        id="addItemInput"
-      />
-      <input
-        type="date"
-        #newItem2
-        (keyup.enter)="addItems(newItem.value, 'active',newItem2.value);"
-        placeholder=""
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        id="addDateInput"
-      />
-  
-      <button class="btn-primary" (click)="addItems(newItem.value, 'active',newItem2.value);">
-        <i class="fa-solid fa-plus"></i>
+<div class="flex h-screen flex-col items-center gap-2">
+  <h1>Send Mails</h1>
+  <form [formGroup]="sendMails" (submit)="send()">
+    <div class="mb-10 space-y-3">
+      <div class="space-y-1">
+        <div class="space-y-2">
+          <div class="flex">
+            <input
+              formControlName="recipient_mail_id"
+              value="recipient_mail_id"
+              placeholder="Enter the mail ids of the people you want to send the mails"
+              class="w-fit h-10 border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none content-stretch focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <button (click)="add()">Add</button>
+          </div>
+          <input
+            formControlName="mail_subject"
+            value="mail_subject"
+            placeholder="Enter subject"
+            class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+          <input
+            formControlName="mail_text"
+            value="mail_text"
+            placeholder="Enter text"
+            class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          />
+        </div>
+      </div>
+      <button
+        type="submit"
+        class="ring-offset-background focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-black px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      >
+        Submit
       </button>
     </div>
-    <ul class="grid grid-cols-4 mt-4 w-full place-items-center">
-      <li *ngFor="let item of allItems"  class="w-[50px] h-[50px]">
-        <h5 class="uppercase font-normal text-gray-700 dark:text-gray-400 p-3 border inline-block border-gray-500 text-center">
-          {{ item.description }}<br>{{ item.dateString}}
-        </h5>
-      </li>
-    </ul>
-  </div>
+  </form>
+</div>

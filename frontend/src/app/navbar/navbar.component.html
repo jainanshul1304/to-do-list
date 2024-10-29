@@ -2,18 +2,18 @@
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
   >
-    <a
-      routerLink="/login"
-      routerLinkActive="active"
-      ariaCurrentWhenActive="page"
-    >
-      <img src="assets/download.jpg" class="h-8" />
-      <span
-        class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"
-        >To-do-list</span
+    
+      <a
+        routerLink="/login"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+        class = "flex justify-between"
       >
-    </a>
+        <img src="assets/mail-227.svg" class="h-8" />
+    <h1 class = "justify-self-center self-center">Mailing Service</h1>
 
+      </a>
+    
     <button
       data-collapse-toggle="navbar-default"
       type="button"
@@ -38,39 +38,35 @@
         />
       </svg>
     </button>
+    @if(logStatus == "true"){
     <div class="hidden w-full md:block md:w-auto" id="navbar-default">
-      <div class="flex items-center mb-4 gap-3 ">
-        <a routerLink="/home" routerLinkActive="active" class = "text-blue-700 text-md hover:text-black">Home</a>
-        <a routerLink="/login" routerLinkActive="active" class = "text-md hover:text-blue-800">Login</a>
-        <input
-          id="default-radio-1"
-          type="radio"
-          (change)="onChange(false)"
-          [checked]="!lastWeek"
-          value=""
-          name="This week"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-        />
-        <label
-          for="default-radio-1"
-          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >This week's to-dos</label
+      <div class="flex items-center mb-4 gap-3">
+        <a
+          routerLink="/home"
+          routerLinkActive="active"
+          class="text-blue-700 text-md hover:text-black"
+          >Home</a
         >
-        <input
-          [checked]="lastWeek"
-          id="default-radio-2"
-          type="radio"
-          value="lastweek"
-          name="last week"
-          (change)="onChange(true)"
-          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-        />
-        <label
-          for="default-radio-2"
-          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >Last week's todos</label
-        >
+
+        <button (click)="onLogOut()" routerLink="/login">Logout</button>
       </div>
     </div>
+    } @else if(logStatus == "false" && route.url != "/login"){
+    <a
+      routerLink="/login"
+      routerLinkActive="active"
+      class="text-md hover:text-blue-800"
+      >Login
+    </a>
+
+    }
+    @else {
+      <a
+      routerLink="/register"
+      routerLinkActive="active"
+      class="text-md hover:text-blue-800"
+      >Register
+    </a>
+    }
   </div>
 </nav>
