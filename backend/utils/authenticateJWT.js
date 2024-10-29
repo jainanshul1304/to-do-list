@@ -1,20 +1,20 @@
-const { verifyToken } = require('./generateAndVerifyToken');
+const { verifyToken } = require("./generateAndVerifyToken");
 
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  
+
   if (authHeader) {
-    const token = authHeader;
-    
+    const token = authHeader; 
+
     try {
-      req.user = verifyToken(token);
-      console.log("Succesful token authentication");
+      const decoded = verifyToken(token);
+      req.user = decoded; 
       next();
-    } catch {
-      return res.status(403).send({ success: false, message: 'Invalid or expired token' });
+    } catch (error) {
+      return res.status(400).send({success : false, message : "Token invalid or expired"});
     }
   } else {
-    return res.status(401).send({ success: false, message: 'Token missing' });
+    return res.status(401).send({ success: false, message: "Token missing" });
   }
 };
 

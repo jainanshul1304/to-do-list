@@ -4,6 +4,6 @@ const authenticateJWT = require('../utils/authenticateJWT');
 const router = express.Router();
 
 
-router.post('/send-mail',authenticateJWT, sendEmailHandler);
+router.post('/send-mail',authenticateJWT ,sendEmailHandler);
 
 module.exports = router;

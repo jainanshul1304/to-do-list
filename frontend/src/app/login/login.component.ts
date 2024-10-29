@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { Auth } from '../../services/auth.services';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -36,11 +36,14 @@ export class LoginComponent {
         console.log(response.success);
         if (response.success) {
           this.isLoggedIn = true;
-          localStorage.setItem('token',response.token);
+          localStorage.setItem('token', response.token);
           localStorage.setItem('loggedIn', 'true');
+
           console.log('Login successful!');
           this.toastr.success('You are now logged in!');
           this.router.navigate(['/home']);
+      
+
         } else {
           this.isLoggedIn = false;
           console.log(this.isLoggedIn);

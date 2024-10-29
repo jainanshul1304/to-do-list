@@ -3,12 +3,11 @@ const { generateToken } = require("../utils/generateAndVerifyToken");
 loginHandler = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const query = "SELECT * FROM UserList WHERE email = ?";
 
-    const status = await loginAuthenticator({ email, password }, query);
+    const status = await loginAuthenticator({ email, password });
     
     if (status.success) {
-      const user = status.results[0];
+      const user = status.results;
       console.log(user);
       const token = generateToken({id : user.id });
       console.log(token);

@@ -1,4 +1,5 @@
 const database = require("../db/db");
+const MailStatus = require("../models/mailStatusModel");
 const { producer } = require("../services/queueService");
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const validator = require("validator");
@@ -13,10 +14,7 @@ const sendEmailHandler = async (req, res) => {
       return res.status(400).json({ message: "Invalid recipient emails" });
     }
     for (let recipient of emailData.recipient) {
-      await database.execute(
-        "INSERT INTO mailStatus (recipient_mail_id, recipient_mail_subject, recipient_mail_text, status) VALUES (?, ?, ?, ?)",
-        [recipient, emailData.subject, emailData.text, "initialised"]
-      );
+      await MailStatus.create({recipient_mail_id : recipient, recipient_mail_subject : emailData.subject, recipient_mail_text : emailData.text, status : "initialised"})
     }
     await delay(5000);
     await producer({...emailData});

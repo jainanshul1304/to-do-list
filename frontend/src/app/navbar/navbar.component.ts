@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component ,Output, EventEmitter, inject, OnInit} from '@angular/core';
+import { Component ,Output, EventEmitter, inject, OnInit, ChangeDetectorRef} from '@angular/core';
 import { ActivatedRoute, Router, RouterModule, RouterOutlet } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 @Component({
@@ -14,11 +14,8 @@ export class NavbarComponent implements OnInit{
   lastWeek: boolean = false;
   @Output() event = new EventEmitter<boolean>();
   private toastr = inject(ToastrService);
+  private cdr = inject(ChangeDetectorRef);
   route = inject(Router);
-  onChange(isChecked: boolean) {
-    this.lastWeek = isChecked;
-    this.event.emit(this.lastWeek);
-  }
   logStatus = localStorage.getItem("loggedIn");
   ngOnInit(): void {
     this.logStatus = localStorage.getItem("loggedIn");
@@ -26,5 +23,6 @@ export class NavbarComponent implements OnInit{
   onLogOut(){
     localStorage.setItem("loggedIn","false");
     this.toastr.info("You are logged out");
+    this.cdr.detectChanges();
   }
 }

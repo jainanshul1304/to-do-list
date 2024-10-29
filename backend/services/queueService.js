@@ -1,6 +1,6 @@
 const Queue = require("bull");
 const { sendEmail } = require("./mailService");
-const database = require("../db/db");
+const MailStatus = require("../models/mailStatusModel");
 const emailQueue = new Queue("email");
 
 const producer = async (emailData) => {
@@ -12,34 +12,48 @@ const producer = async (emailData) => {
     });
   }
 };
-(consumer = async () => {
+
+(async () => {
   await emailQueue.process(async (job) => {
     const { recipient, subject, text } = job.data;
-    sendEmail(recipient, subject, text);
+    await sendEmail(recipient, subject, text);
   });
 })();
 
-(mailStatus = () => {
+(() => {
   emailQueue.on("completed", async (job) => {
     const { recipient, subject, text } = job.data;
     console.log(`Job completed for ${recipient}`);
-    await database.execute(
-        "UPDATE mailStatus SET status = ? WHERE recipient_mail_id = ? AND recipient_mail_subject = ? AND recipient_mail_text = ?",
-        ["success", recipient, subject, text]
+      await MailStatus.update(
+        { recipient_mail_status: "success" },
+        {
+          where: {
+            recipient_mail_id: recipient,
+            recipient_mail_subject: subject,
+            recipient_mail_text: text,
+          },
+        }
       );
+      console.log(`Mail status updated to 'success' for ${recipient}`);
     return true;
   });
+
   emailQueue.on("failed", async (job, err) => {
     const { recipient, subject, text } = job.data;
-    console.error(`Job failed for ${recipient}: ${err}`);
-    await database.execute(
-        "UPDATE mailStatus SET status = ? WHERE recipient_mail_id = ? AND recipient_mail_subject = ? AND recipient_mail_text = ?",
-        ["failed", recipient, subject, text]
-      );    
+    console.error(`Job failed for ${recipient}: ${err.message}`);
+      await MailStatus.update(
+        { recipient_mail_status: "failed" },
+        {
+          where: {
+            recipient_mail_id: recipient,
+            recipient_mail_subject: subject,
+            recipient_mail_text: text,
+          },
+        }
+      );
+      console.log(`Mail status updated to 'failed' for ${recipient}`);
     return false;
   });
 })();
-
-
 
 module.exports = { producer };
